@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+      name="description"
+      content="Aprende conceptos de inteligencia artificial y prepárate para la certificación Microsoft AI-901."
+    >
+    <title>AI-901 · Tutor de inteligencia artificial</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/app.js" defer></script>
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="AI-901, inicio">
+          <span class="brand-mark" aria-hidden="true">AI</span>
+          <span class="brand-name">AI<span class="brand-divider">/</span>901</span>
+        </a>
+        <span class="topbar-label">TU COMPAÑERO DE ESTUDIO</span>
+        <span class="connection-status"><span aria-hidden="true"></span> Tutor listo</span>
+      </header>
+
+      <section class="chat-layout" aria-labelledby="page-title">
+        <div class="intro">
+          <p class="eyebrow"><span></span> PREPÁRATE CON CONFIANZA</p>
+          <h1 id="page-title">La IA, <span>en palabras simples.</span></h1>
+          <p class="intro-copy">
+            Aprende los conceptos clave de AI-901, paso a paso y con fuentes de
+            Microsoft Learn.
+          </p>
+        </div>
+
+        <section class="chat-card" aria-label="Chat de estudio AI-901">
+          <div class="chat-heading">
+            <div class="tutor-avatar" aria-hidden="true">✳</div>
+            <div>
+              <h2>Tu tutor AI-901</h2>
+              <p>Explicaciones claras, siempre con fuentes</p>
+            </div>
+            <span class="verified-badge"><span aria-hidden="true">✓</span> Fuentes Learn</span>
+          </div>
+
+          <div
+            class="messages"
+            id="messages"
+            role="log"
+            aria-live="polite"
+            aria-relevant="additions"
+            aria-label="Mensajes de la conversación"
+          >
+            <article class="message assistant-message">
+              <div class="message-avatar" aria-hidden="true">✳</div>
+              <div class="message-content">
+                <p>
+                  ¡Hola! Estoy aquí para ayudarte a prepararte para AI-901.
+                  Pregúntame sobre un concepto de inteligencia artificial y te
+                  lo explicaré de forma sencilla, con una fuente de Microsoft
+                  Learn.
+                </p>
+                <span class="message-time">TU TUTOR · AI-901</span>
+              </div>
+            </article>
+          </div>
+
+          <form class="composer" id="chat-form">
+            <label class="visually-hidden" for="message-input">Escribe tu pregunta</label>
+            <textarea
+              id="message-input"
+              name="message"
+              rows="1"
+              maxlength="2000"
+              placeholder="Escribe una pregunta sobre inteligencia artificial..."
+              required
+            ></textarea>
+            <div class="composer-footer">
+              <span class="composer-hint">Respuestas verificadas con Microsoft Learn</span>
+              <div class="composer-actions">
+                <span class="character-count" id="character-count">0 / 2000</span>
+                <button class="send-button" id="send-button" type="submit" aria-label="Enviar pregunta">
+                  <span id="send-label">Enviar</span>
+                  <span aria-hidden="true">↗</span>
+                </button>
+              </div>
+            </div>
+          </form>
+        </section>
+
+        <p class="privacy-note">
+          <span aria-hidden="true">⌁</span>
+          Tu conversación se mantiene solo durante esta sesión.
+        </p>
+      </section>
+    </main>
+  </body>
+</html>

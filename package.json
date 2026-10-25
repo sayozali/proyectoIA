@@ -1,0 +1,19 @@
+{
+  "name": "chatbot-certificador-ai-901",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch --env-file-if-exists=.env server.js",
+    "create-agent": "node --env-file-if-exists=.env scripts/create-agent.js"
+  },
+  "dependencies": {
+    "@azure/ai-projects": "^2.7.1",
+    "@azure/identity": "^4.7.0",
+    "express": "^5.1.0"
+  }
+}
