@@ -3,16 +3,6 @@ import { DefaultAzureCredential } from "@azure/identity";
 import express from "express";
 import path from "node:path";
 
-
-/*
-SDK: SOFTWARE DEVELOPMENT KIT
-AIProjectClient: Sirve para todo tipo de agente o de servicio de Microsoft Foundry
-  - Este usa el endpoint del proyecto de Foundry
-AzureOpenAIClient: Sirve para el modelo de lenguaje de agentes de tipo OpenAI GPT de Microsoft Foundry 
-  - Este usa el endpoint del agente
-
-*/
-
 const projectEndpoint = process.env.FOUNDRY_PROJECT_ENDPOINT;
 const agentName = process.env.FOUNDRY_AGENT_NAME;
 
@@ -29,18 +19,18 @@ const project = new AIProjectClient(
   new DefaultAzureCredential(),
 );
 const openai = project.getOpenAIClient();
+const agentRef = {
+  body: {
+    agent_reference: {
+      name: agentName,
+      type: "agent_reference",
+    },
+  },
+};
 const app = express();
 const port = process.env.PORT || 3000;
 
-function getLearnUrls(text) {
-  return new Set(
-    [...text.matchAll(/https:\/\/learn\.microsoft\.com\/[^\s"'<>)}\]]+/gi)].map(
-      ([url]) => url.replace(/[.,;:!?]+$/, ""),
-    ),
-  );
-}
-
-app.use(express.json({ limit: "16kb" }));
+app.use(express.json({ limit: "10kb" }));
 app.use(express.static(path.join(import.meta.dirname, "public")));
 
 app.get("/health", (_request, response) => {
@@ -67,7 +57,6 @@ app.post("/api/chat", async (request, response) => {
 
   if (
     requestedConversationId !== undefined &&
-    requestedConversationId !== null &&
     (typeof requestedConversationId !== "string" ||
       requestedConversationId.length > 256)
   ) {
@@ -75,41 +64,22 @@ app.post("/api/chat", async (request, response) => {
     return;
   }
 
+  let operation = "crear la conversación";
   try {
     const conversationId = requestedConversationId?.trim()
-      ? requestedConversationId
+      ? requestedConversationId.trim()
       : (await openai.conversations.create()).id;
+    operation = "solicitar la respuesta del agente";
     const result = await openai.responses.create(
       {
         conversation: conversationId,
         input: message,
       },
-      {
-        body: {
-          agent_reference: {
-            name: agentName,
-            type: "agent_reference",
-          },
-        },
-      },
+      agentRef,
     );
-    const successfulLearnSearch = result.output?.find(
-      (item) =>
-        item.type === "mcp_call" &&
-        item.name === "microsoft_docs_search" &&
-        item.status === "completed" &&
-        !item.error &&
-        Boolean(item.output?.trim()),
-    );
-
-    if (!result.output_text?.trim() || !successfulLearnSearch) {
-      throw new Error("Foundry no devolvió una respuesta verificada por Learn.");
-    }
-
-    const citedLearnUrls = getLearnUrls(result.output_text);
-    const searchedLearnUrls = getLearnUrls(successfulLearnSearch.output);
-    if (![...citedLearnUrls].some((url) => searchedLearnUrls.has(url))) {
-      throw new Error("La respuesta no cita una fuente devuelta por Learn.");
+    operation = "validar la respuesta del agente";
+    if (!result.output_text?.trim()) {
+      throw new Error("Foundry devolvió una respuesta vacía.");
     }
 
     response.json({
@@ -117,17 +87,37 @@ app.post("/api/chat", async (request, response) => {
       conversation_id: conversationId,
     });
   } catch (error) {
-    console.error(
-      "Falló una solicitud de chat a Microsoft Foundry.",
-      error instanceof Error ? error.name : "Error desconocido",
-    );
+    const errorCode =
+      error && typeof error === "object" && "code" in error &&
+      typeof error.code === "string"
+        ? error.code
+        : undefined;
+    let errorStatus;
+    if (error && typeof error === "object") {
+      if ("status" in error && typeof error.status === "number") {
+        errorStatus = error.status;
+      } else if ("statusCode" in error && typeof error.statusCode === "number") {
+        errorStatus = error.statusCode;
+      }
+    }
+    console.error("Falló una solicitud de chat a Microsoft Foundry.", {
+      operation,
+      name: error instanceof Error ? error.name : "Error desconocido",
+      code: errorCode,
+      status: errorStatus,
+    });
     response.status(502).json({
-      error: "No se pudo obtener una respuesta verificada. Inténtalo de nuevo.",
+      error: "No se pudo obtener una respuesta. Inténtalo de nuevo.",
     });
   }
 });
 
-app.use((error, _request, response, _next) => {
+app.use((error, _request, response, next) => {
+  if (response.headersSent) {
+    next(error);
+    return;
+  }
+
   if (error?.type === "entity.parse.failed" || error?.type === "entity.too.large") {
     response.status(error.type === "entity.too.large" ? 413 : 400).json({
       error:

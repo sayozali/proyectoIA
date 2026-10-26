@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta
+      name="description"
+      content="Finalización de la conversación con el Chatbot RINOSOFT Gestoría."
+    >
+    <title>Chat finalizado | RINOSOFT Gestoría</title>
+    <link rel="stylesheet" href="/styles.css">
+    <script src="/finalizacion.js" defer></script>
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="topbar">
+        <a class="brand" href="/" aria-label="Gestor de Servicios Migratorios en México, inicio">
+          <span class="brand-mark" aria-hidden="true">MX</span>
+          <span class="brand-name">RINOSOFT<span class="brand-divider">/</span>GESTORÍA</span>
+        </a>
+        <span class="connection-status">Asistente con IA</span>
+      </header>
+
+      <section class="completion-card" aria-labelledby="completion-title">
+        <div class="tutor-avatar completion-avatar" aria-hidden="true">✳</div>
+        <p class="eyebrow"><span></span> CONVERSACIÓN FINALIZADA</p>
+        <h1 id="completion-title">
+          Gracias por utilizar Chatbot RINOSOFT Gestoría, es un placer ayudarle
+        </h1>
+        <p class="completion-status" id="completion-status" role="status" aria-live="polite">
+          Preparando las respuestas de esta conversación…
+        </p>
+        <button class="send-button save-button" id="save-response" type="button" disabled>
+          Guardar respuesta
+        </button>
+      </section>
+    </main>
+  </body>
+</html>

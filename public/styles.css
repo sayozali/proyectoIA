@@ -1,35 +1,35 @@
 :root {
   color-scheme: light dark;
-  --page: #f4f6fb;
+  --page: #f9f3f5;
   --surface: #ffffff;
-  --surface-soft: #f6f7fb;
-  --text: #18243a;
-  --muted: #68758b;
-  --line: #e5e9f1;
-  --accent: #5146e5;
-  --accent-dark: #4035cb;
-  --accent-soft: #eeedff;
-  --user-bubble: #5146e5;
-  --assistant-bubble: #f6f7fb;
+  --surface-soft: #f9f3f5;
+  --text: #2b1820;
+  --muted: #7d6670;
+  --line: #eddfe4;
+  --accent: #8a1f3d;
+  --accent-dark: #6b1530;
+  --accent-soft: #f6e4ea;
+  --user-bubble: #8a1f3d;
+  --assistant-bubble: #f9f3f5;
   --success: #1e946b;
-  --shadow: 0 22px 60px rgb(32 45 83 / 9%);
+  --shadow: 0 22px 60px rgb(90 20 45 / 10%);
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --page: #10131d;
-    --surface: #191e2b;
-    --surface-soft: #202637;
-    --text: #eef1fb;
-    --muted: #a4aec2;
-    --line: #30384b;
-    --accent: #a49bff;
-    --accent-dark: #b8b1ff;
-    --accent-soft: #302d50;
-    --user-bubble: #5146e5;
-    --assistant-bubble: #242a3a;
+    --page: #1a1013;
+    --surface: #261820;
+    --surface-soft: #301f28;
+    --text: #f7eef1;
+    --muted: #c4a9b3;
+    --line: #4a3039;
+    --accent: #e07a96;
+    --accent-dark: #eb9fb4;
+    --accent-soft: #43202c;
+    --user-bubble: #8a1f3d;
+    --assistant-bubble: #33212a;
     --success: #69d7ad;
-    --shadow: 0 22px 60px rgb(0 0 0 / 22%);
+    --shadow: 0 22px 60px rgb(0 0 0 / 28%);
   }
 }
 
@@ -42,7 +42,7 @@ body {
   min-height: 100vh;
   margin: 0;
   background:
-    radial-gradient(ellipse at 50% 24%, rgb(96 83 236 / 8%), transparent 43%),
+    radial-gradient(ellipse at 50% 24%, rgb(22 116 102 / 9%), transparent 43%),
     var(--page);
   color: var(--text);
   font-family:
@@ -179,6 +179,58 @@ textarea {
   box-shadow: var(--shadow);
 }
 
+.completion-card {
+  display: flex;
+  width: min(100%, 650px);
+  min-height: 310px;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  margin: clamp(55px, 14vh, 130px) auto 40px;
+  padding: 40px 28px;
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.completion-avatar {
+  width: 52px;
+  height: 52px;
+  border-radius: 17px;
+  font-size: 24px;
+}
+
+.completion-card .eyebrow {
+  margin: 4px 0 0;
+}
+
+.completion-card h1 {
+  max-width: 520px;
+  margin: 0;
+  font-size: clamp(23px, 4vw, 32px);
+  letter-spacing: -0.8px;
+  line-height: 1.25;
+}
+
+.completion-status {
+  min-height: 20px;
+  margin: 0 0 4px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.save-button {
+  min-width: 170px;
+}
+
+.save-button:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
 .chat-heading {
   display: flex;
   min-height: 76px;
@@ -242,6 +294,8 @@ textarea {
 
 .assistant-message {
   align-self: flex-start;
+  width: min(100%, 34rem);
+  max-width: 100%;
 }
 
 .user-message {
@@ -263,6 +317,7 @@ textarea {
 }
 
 .message-content {
+  flex: 1;
   min-width: 0;
 }
 
@@ -272,7 +327,7 @@ textarea {
   border: 1px solid var(--line);
   border-radius: 4px 15px 15px;
   background: var(--assistant-bubble);
-  font-size: 13px;
+  font-size: clamp(13px, 2vw, 14px);
   line-height: 1.7;
   overflow-wrap: anywhere;
   white-space: pre-wrap;
@@ -314,7 +369,7 @@ textarea {
 .composer textarea {
   display: block;
   width: 100%;
-  min-height: 28px;
+  min-height: 44px;
   max-height: 140px;
   resize: vertical;
   border: 0;
@@ -353,9 +408,46 @@ textarea {
   gap: 12px;
 }
 
+.chat-card-footer {
+  display: flex;
+  min-height: 60px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 17px 17px;
+}
+
+.finish-status {
+  margin: 0;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.finish-button {
+  min-height: 44px;
+  padding: 0 15px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: var(--surface);
+  color: var(--text);
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 680;
+}
+
+.finish-button:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.finish-button:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
 .send-button {
   display: inline-flex;
-  min-height: 35px;
+  min-height: 44px;
   align-items: center;
   justify-content: center;
   gap: 9px;
@@ -456,6 +548,14 @@ textarea {
 
   .composer-actions {
     gap: 7px;
+  }
+
+  .chat-card-footer {
+    padding: 0 10px 12px;
+  }
+
+  .finish-status {
+    font-size: 10px;
   }
 
   .character-count {
